@@ -5,6 +5,7 @@ namespace PatientRecovery.PatientService.Features.Commands
 {
     public class CreatePatientCommand : IRequest<PatientDto>
     {
+        public string UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
@@ -13,5 +14,6 @@ namespace PatientRecovery.PatientService.Features.Commands
         public string Address { get; set; }
         public string EmergencyContact { get; set; }
         public string MedicalHistory { get; set; }
+        public string Status { get; set; } = "Active";  // Default qiymat
     }
 }

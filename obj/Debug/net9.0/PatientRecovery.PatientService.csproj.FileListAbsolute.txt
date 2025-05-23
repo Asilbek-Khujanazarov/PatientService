@@ -146,3 +146,5 @@ F:\PatientRecoverySystem\PatientRecovery.PatientService\bin\Debug\net9.0\AutoMap
 F:\PatientRecoverySystem\PatientRecovery.PatientService\bin\Debug\net9.0\MediatR.dll
 F:\PatientRecoverySystem\PatientRecovery.PatientService\bin\Debug\net9.0\MediatR.Contracts.dll
 F:\PatientRecoverySystem\PatientRecovery.PatientService\bin\Debug\net9.0\MediatR.Extensions.Microsoft.DependencyInjection.dll
+F:\PatientRecoverySystem\PatientRecovery.PatientService\obj\Debug\net9.0\PatientRecovery.PatientService.sourcelink.json
+F:\PatientRecoverySystem\PatientRecovery.PatientService\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

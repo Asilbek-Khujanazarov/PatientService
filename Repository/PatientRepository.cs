@@ -69,5 +69,15 @@ namespace PatientRecovery.PatientService.Repository
                 .OrderByDescending(m => m.StartDate)
                 .ToListAsync();
         }
+
+
+         public async Task<IEnumerable<Patient>> GetByUserIdAsync(string userId)
+    {
+        return await _context.Patients
+            .Where(p => p.UserId == userId)
+            .Include(p => p.VitalSigns)
+            .Include(p => p.Medications)
+            .ToListAsync();
+    }
     }
 }

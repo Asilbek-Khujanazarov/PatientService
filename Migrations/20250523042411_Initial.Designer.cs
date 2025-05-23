@@ -12,8 +12,8 @@ using PatientRecovery.PatientService.Data;
 namespace PatientRecovery.PatientService.Migrations
 {
     [DbContext(typeof(PatientDbContext))]
-    [Migration("20250520132314_InitialCreatew")]
-    partial class InitialCreatew
+    [Migration("20250523042411_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,8 @@ namespace PatientRecovery.PatientService.Migrations
 
                     b.Property<string>("Dosage")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
@@ -48,7 +49,8 @@ namespace PatientRecovery.PatientService.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
@@ -144,7 +146,8 @@ namespace PatientRecovery.PatientService.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Temperature")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(5, 2)
+                        .HasColumnType("decimal(5,2)");
 
                     b.HasKey("Id");
 

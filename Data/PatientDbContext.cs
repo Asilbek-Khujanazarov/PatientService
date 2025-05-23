@@ -18,15 +18,33 @@ namespace PatientRecovery.PatientService.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Patient -> VitalSigns relation
             modelBuilder.Entity<Patient>()
                 .HasMany(p => p.VitalSigns)
                 .WithOne(v => v.Patient)
-                .HasForeignKey(v => v.PatientId);
+                .HasForeignKey(v => v.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // Patient -> Medications relation
             modelBuilder.Entity<Patient>()
                 .HasMany(p => p.Medications)
                 .WithOne(m => m.Patient)
-                .HasForeignKey(m => m.PatientId);
+                .HasForeignKey(m => m.PatientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // VitalSigns configuration
+            modelBuilder.Entity<VitalSigns>()
+                .Property(v => v.Temperature)
+                .HasPrecision(5, 2);  // 123.45 format
+
+            // Medications configuration
+            modelBuilder.Entity<Medication>()
+                .Property(m => m.Name)
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<Medication>()
+                .Property(m => m.Dosage)
+                .HasMaxLength(50);
         }
     }
 }

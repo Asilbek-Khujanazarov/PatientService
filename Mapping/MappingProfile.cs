@@ -9,9 +9,15 @@ namespace PatientRecovery.PatientService.Mapping
     public class MappingProfile : Profile
     {
         public MappingProfile()
+
         {
+            CreateMap<CreatePatientCommand, Patient>()
+           .ForMember(dest => dest.Status,
+                     opt => opt.MapFrom(src => src.Status ?? "Active"))
+           .ForMember(dest => dest.AdmissionDate,
+                     opt => opt.MapFrom(src => DateTime.UtcNow));
+
             CreateMap<Patient, PatientDto>();
-            CreateMap<CreatePatientCommand, Patient>();
             CreateMap<UpdatePatientCommand, Patient>();
             CreateMap<VitalSigns, VitalSignsDto>();
             CreateMap<CreateVitalSignsCommand, VitalSigns>();

@@ -2,19 +2,23 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using PatientRecovery.PatientService.DTOs;
 using PatientRecovery.PatientService.Features.Queries;
-using PatientRecovery.PatientService.Features.Commands; 
+using PatientRecovery.PatientService.Features.Commands;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PatientRecovery.PatientService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class PatientsController : ControllerBase
     {
         private readonly IMediator _mediator;
-
-        public PatientsController(IMediator mediator)
+        private readonly ILogger<PatientsController> _logger;
+        public PatientsController(IMediator mediator, ILogger<PatientsController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PatientDto>>> GetAll()
@@ -37,10 +41,43 @@ namespace PatientRecovery.PatientService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PatientDto>> Create([FromBody] CreatePatientCommand command)
+        public async Task<ActionResult<PatientDto>> Create(CreatePatientCommand command)
         {
-            var result = await _mediator.Send(command);
-            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
+            try
+            {
+                // User ID'ni olish
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized("User not authenticated");
+                }
+
+                // Command'ga UserID'ni qo'shish
+                command.UserId = userId;
+
+                var result = await _mediator.Send(command);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating patient");
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        // Foydalanuvchiga tegishli bemorlarni olish
+        [HttpGet("my")]
+        public async Task<ActionResult<IEnumerable<PatientDto>>> GetMyPatients()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User not authenticated");
+            }
+
+            var query = new GetPatientsByUserIdQuery { UserId = userId };
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
