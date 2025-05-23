@@ -56,30 +56,18 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        // Debug uchun
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                Console.WriteLine($"Auth Failed: {context.Exception.Message}");
-                return Task.CompletedTask;
-            }
-        };
-
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
-            
             ValidIssuer = "PatientRecoverySystem",
             ValidAudience = "PatientRecoveryClients",
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("Identity-Servicedagi-Secret-Key-Shu-Yerga-Yoziladi"))
+                Encoding.UTF8.GetBytes("PatientRecoverySystem_SecretKey_2025_05_22_VERY_SECRET_KEY_MIN_32_CHARS")) // Bu yerda IdentityService’dagi secret bo‘lishi kerak!
         };
     });
-
 // Database
 builder.Services.AddDbContext<PatientDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

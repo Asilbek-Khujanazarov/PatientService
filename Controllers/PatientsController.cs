@@ -46,11 +46,12 @@ namespace PatientRecovery.PatientService.Controllers
             try
             {
                 // User ID'ni olish
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (string.IsNullOrEmpty(userId))
-                {
-                    return Unauthorized("User not authenticated");
-                }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+          ?? User.FindFirst("sub")?.Value;
+if (string.IsNullOrEmpty(userId))
+{
+    return Unauthorized("User not authenticated");
+}
 
                 // Command'ga UserID'ni qo'shish
                 command.UserId = userId;
